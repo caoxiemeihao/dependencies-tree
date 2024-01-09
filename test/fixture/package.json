@@ -1,0 +1,8 @@
+{
+  "name": "dependencies-tree/test",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}
