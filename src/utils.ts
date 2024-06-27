@@ -11,6 +11,7 @@ export interface Dependency {
 export interface SourceAndDestination {
   src: string
   dest: string
+  name: string
 }
 
 function isRootPath(dir: string) {
@@ -91,6 +92,7 @@ export async function resolveDependencies(root: string) {
           path: {
             src: depPath,
             dest: path.relative(root, depPath),
+            name,
           },
           dependencies: [],
         }
