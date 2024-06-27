@@ -10,73 +10,88 @@ npm i dependencies-tree
 
 ## Usage
 
-**package.json**
+Assume there is a dependency `electron-squirrel-startup` in **package.json**.
 
 ```json
 {
-  "name": "dependencies-tree/test",
-  "private": true,
-  "version": "0.0.0",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0"
   }
 }
 ```
 
-**main.js**
+We get the dependency tree based on the path where **package.json** is located.
 
 ```ts
-import dependenciesTree, { flatDependencies } from 'dependencies-tree'
+import dependenciesTree from 'dependencies-tree'
 
 const root = process.cwd()
 const depsTree = await dependenciesTree(root)
-const depsFlat = await flatDependencies(root)
 
 console.log(depsTree)
+
 // ↓↓↓↓
+
 [
   {
-    "name": "electron-squirrel-startup",
-    "path": {
-      "src": "/Users/name/project-path/node_modules/electron-squirrel-startup",
-      "dest": "node_modules/electron-squirrel-startup"
+    name: 'electron-squirrel-startup',
+    path: {
+      src: path.join(fixtureRoot, 'node_modules', 'electron-squirrel-startup'),
+      dest: path.join('node_modules', 'electron-squirrel-startup'),
+      name: 'electron-squirrel-startup',
     },
-    "dependencies": [
+    dependencies: [
       {
-        "name": "debug",
-        "path": {
-          "src": "/Users/name/project-path/node_modules/debug",
-          "dest": "node_modules/debug"
+        name: 'debug',
+        path: {
+          src: path.join(fixtureRoot, 'node_modules', 'debug'),
+          dest: path.join('node_modules', 'debug'),
+          name: 'debug',
         },
-        "dependencies": [
+        dependencies: [
           {
-            "name": "ms",
-            "path": {
-              "src": "/Users/name/project-path/node_modules/ms",
-              "dest": "node_modules/ms"
+            name: 'ms',
+            path: {
+              src: path.join(fixtureRoot, 'node_modules', 'ms'),
+              dest: path.join('node_modules', 'ms'),
+              name: 'ms',
             },
-            "dependencies": []
-          }
-        ]
-      }
-    ]
-  }
+            dependencies: [],
+          },
+        ],
+      },
+    ],
+  },
 ]
+```
+
+Get the flat dependency tree
+
+```ts
+import { flatDependencies } from 'dependencies-tree'
+
+const root = process.cwd()
+const depsFlat = await flatDependencies(root)
 
 console.log(depsFlat)
+
 // ↓↓↓↓
+
 [
   {
-    "src": "/Users/name/project-path/node_modules/electron-squirrel-startup",
-    "dest": "node_modules/electron-squirrel-startup"
+    src: path.join(fixtureRoot, 'node_modules', 'electron-squirrel-startup'),
+    dest: path.join('node_modules', 'electron-squirrel-startup'),
+    name: 'electron-squirrel-startup',
   },
   {
-    "src": "/Users/name/project-path/node_modules/debug",
-    "dest": "node_modules/debug"
+    src: path.join(fixtureRoot, 'node_modules', 'debug'),
+    dest: path.join('node_modules', 'debug'),
+    name: 'debug',
   },
   {
-    "src": "/Users/name/project-path/node_modules/ms",
-    "dest": "node_modules/ms"
-  }
+    src: path.join(fixtureRoot, 'node_modules', 'ms'),
+    dest: path.join('node_modules', 'ms'),
+    name: 'ms',
+  },
 ]
 ```
