@@ -23,6 +23,7 @@ const depsTree = [
     path: {
       src: path.join(fixtureRoot, 'node_modules', 'electron-squirrel-startup'),
       dest: path.join('node_modules', 'electron-squirrel-startup'),
+      name: 'electron-squirrel-startup',
     },
     dependencies: [
       {
@@ -30,6 +31,7 @@ const depsTree = [
         path: {
           src: path.join(fixtureRoot, 'node_modules', 'debug'),
           dest: path.join('node_modules', 'debug'),
+          name: 'debug',
         },
         dependencies: [
           {
@@ -37,6 +39,7 @@ const depsTree = [
             path: {
               src: path.join(fixtureRoot, 'node_modules', 'ms'),
               dest: path.join('node_modules', 'ms'),
+              name: 'ms',
             },
             dependencies: [],
           },
@@ -49,14 +52,17 @@ const depsFlat = [
   {
     src: path.join(fixtureRoot, 'node_modules', 'electron-squirrel-startup'),
     dest: path.join('node_modules', 'electron-squirrel-startup'),
+    name: 'electron-squirrel-startup',
   },
   {
     src: path.join(fixtureRoot, 'node_modules', 'debug'),
     dest: path.join('node_modules', 'debug'),
+    name: 'debug',
   },
   {
     src: path.join(fixtureRoot, 'node_modules', 'ms'),
     dest: path.join('node_modules', 'ms'),
+    name: 'ms',
   },
 ]
 
