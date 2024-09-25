@@ -14,6 +14,13 @@ export interface SourceAndDestination {
   name: string
 }
 
+export interface DependenciesOptions {
+  /** @default process.cwd() */
+  root?: string
+  /** `dependencies` in package.json under the default root path */
+  dependencies?: string[]
+}
+
 function isRootPath(dir: string) {
   // *unix or Windows root path
   return dir === '/' || /^[a-zA-Z]:\\$/i.test(dir)
@@ -53,8 +60,8 @@ export async function readPackageJson(root = process.cwd()): Promise<PackageJson
   }
 }
 
-export async function resolveDependencies(root: string) {
-  const rootDependencies = Object.keys((await readPackageJson(root)).dependencies || {})
+export async function resolveDependencies(options: Required<DependenciesOptions>) {
+  const { root, dependencies: rootDependencies } = options
   const resolve = async (prePath: string, dependencies: string[], collected: Map<string, Dependency> = new Map()) =>
     await Promise.all(
       dependencies.map(async (name) => {
@@ -107,8 +114,12 @@ export async function resolveDependencies(root: string) {
   return resolve(root, rootDependencies)
 }
 
-export async function flatDependencies(root = process.cwd()) {
-  const dpesTree = await resolveDependencies(root)
+export async function getDependencies(options?: DependenciesOptions) {
+  options ??= {}
+  options.root ??= process.cwd()
+  options.dependencies ??= Object.keys((await readPackageJson(options.root)).dependencies ?? {})
+
+  const dpesTree = await resolveDependencies({ root: options.root, dependencies: options.dependencies })
   const depsFlat = new Map<string, SourceAndDestination>()
 
   const flatten = (dep: Dependency) => {
@@ -117,5 +128,8 @@ export async function flatDependencies(root = process.cwd()) {
   }
   dpesTree.forEach(flatten)
 
-  return [...depsFlat.values()]
+  return {
+    tree: dpesTree,
+    flat: [...depsFlat.values()],
+  }
 }
