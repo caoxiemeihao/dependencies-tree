@@ -10,6 +10,25 @@ npm i dependencies-tree
 
 ## Usage
 
+```ts
+import getDependencies from 'dependencies-tree'
+
+const { tree, flat } = await getDependencies()
+```
+
+## API <sub><sup>(Define)</sup></sub>
+
+```ts
+export interface DependenciesOptions {
+  /** @default process.cwd() */
+  root?: string
+  /** `dependencies` in package.json under the default root path */
+  dependencies?: string[]
+}
+```
+
+## Example
+
 Assume there is a dependency `electron-squirrel-startup` in **package.json**.
 
 ```json
@@ -23,12 +42,12 @@ Assume there is a dependency `electron-squirrel-startup` in **package.json**.
 We get the dependency tree based on the path where **package.json** is located.
 
 ```ts
-import dependenciesTree from 'dependencies-tree'
+import getDependencies from 'dependencies-tree'
 
 const root = process.cwd()
-const depsTree = await dependenciesTree(root)
+const { tree } = await getDependencies({ root })
 
-console.log(depsTree)
+console.log(tree)
 
 // ↓↓↓↓
 
@@ -68,12 +87,12 @@ console.log(depsTree)
 Get the flat dependency tree
 
 ```ts
-import { flatDependencies } from 'dependencies-tree'
+import getDependencies from 'dependencies-tree'
 
 const root = process.cwd()
-const depsFlat = await flatDependencies(root)
+const { flat } = await getDependencies({ root })
 
-console.log(depsFlat)
+console.log(falg)
 
 // ↓↓↓↓
 

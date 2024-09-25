@@ -8,11 +8,11 @@ import {
   expect,
   it,
 } from 'vitest'
-import dependenciesTree, {
-  flatDependencies,
+import {
   lookupNodeModulesPaths,
   readPackageJson,
-} from '../src/index'
+  getDependencies,
+} from '../src/utils'
 
 const execPromise = promisify(exec)
 const fixtureRoot = path.join(__dirname, 'fixture')
@@ -78,10 +78,9 @@ describe('src/index', () => {
   })
 
   it('dependencies of package.json is resolved correct', async () => {
-    const depsT = await dependenciesTree(fixtureRoot)
-    const depsF = await flatDependencies(fixtureRoot)
-    expect(depsTree).deep.equal(depsT)
-    expect(depsFlat).deep.equal(depsF)
+    const { tree, flat } = await getDependencies({ root: fixtureRoot })
+    expect(depsTree).deep.equal(tree)
+    expect(depsFlat).deep.equal(flat)
   })
 
   it('node_modules paths is lookup correct', async () => {
